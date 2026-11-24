@@ -4,6 +4,8 @@
 */
 
 export default function Profile() {
-  return;
-  <img src="KatsukoSaruhashi.jpg" alt="Katsuko Saruhashi" />;
+  // JSX возвращаем обёрнутым в скобки; без return; компонент не отрисовывался бы
+  return (
+    <img src="KatsukoSaruhashi.jpg" alt="Katsuko Saruhashi" />
+  );
 }
