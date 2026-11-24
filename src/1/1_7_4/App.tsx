@@ -14,7 +14,6 @@
 
   Это редкий случай, когда индекс в качестве ключа допустим, потому что строки стихотворения никогда не будут перестраиваться.
 */
-
 const poem = {
   lines: [
       'I write, erase, rewrite',
@@ -26,9 +25,10 @@ const poem = {
 export default function Poem() {
   return (
       <article>
-          {poem.lines.map((line, index) => (
-              <p key={index}>{line}</p>
-          ))}
+          {poem.lines.map((line, index) => [
+              <p key={`${index}-p`}>{line}</p>,
+              index < poem.lines.length - 1 && <hr key={`${index}-hr`} />,
+          ])}
       </article>
   );
 }
