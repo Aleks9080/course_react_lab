@@ -1,8 +1,8 @@
 // 1_7_1 Splitting a list in two 
 /*
-  В этом примере показан список всех людей.
+В этом примере показан список всех людей.
 
-  Измените его, чтобы последовательно вывести два отдельных списка: Химики и Все остальные. Как и ранее, вы можете определить, является ли человек химиком, проверив, что person.profession === 'chemist'.
+Измените его, чтобы последовательно вывести два отдельных списка: Химики и Все остальные. Как и ранее, вы можете определить, является ли человек химиком, проверив, что person.profession === 'chemist'.
 */
 
 import { people } from './data.js';
@@ -16,8 +16,8 @@ export type Person = {
   imageId: string;
 }
 
-export default function List() {
-    const listItems = people.map((person) => (
+function PersonItem({ person }: { person: Person }) {
+    return (
         <li key={person.id}>
             <img
                 src={getImageUrl(person)}
@@ -29,11 +29,20 @@ export default function List() {
                 known for {person.accomplishment}
             </p>
         </li>
-    ));
+    );
+}
+
+export default function List() {
+    const chemists = people.filter((person) => person.profession === 'chemist');
+    const everyoneElse = people.filter((person) => person.profession !== 'chemist');
+
     return (
         <article>
             <h1>Scientists</h1>
-            <ul>{listItems}</ul>
+            <h2>Chemists</h2>
+            <ul>{chemists.map((person) => <PersonItem key={person.id} person={person} />)}</ul>
+            <h2>Everyone Else</h2>
+            <ul>{everyoneElse.map((person) => <PersonItem key={person.id} person={person} />)}</ul>
         </article>
     );
 }
