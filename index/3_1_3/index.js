@@ -1,53 +1,66 @@
+// Состояние
+const state = {
+    isEditing: false,
+    firstName: 'Jane',
+    lastName: 'Jacobs',
+};
+
+// Элементы DOM
+const form = document.getElementById('form');
+const editButton = document.getElementById('editButton');
+const firstNameInput = document.getElementById('firstNameInput');
+const firstNameText = document.getElementById('firstNameText');
+const lastNameInput = document.getElementById('lastNameInput');
+const lastNameText = document.getElementById('lastNameText');
+const helloText = document.getElementById('helloText');
+
+// Функция рендеринга UI на основе текущего состояния
+function render() {
+    if (state.isEditing) {
+        // Режим редактирования
+        editButton.textContent = 'Сохранить';
+        firstNameText.style.display = 'none';
+        lastNameText.style.display = 'none';
+        firstNameInput.style.display = '';
+        lastNameInput.style.display = '';
+        firstNameInput.value = state.firstName;
+        lastNameInput.value = state.lastName;
+    } else {
+        // Режим просмотра
+        editButton.textContent = 'Редактировать';
+        firstNameInput.style.display = 'none';
+        lastNameInput.style.display = 'none';
+        firstNameText.style.display = '';
+        lastNameText.style.display = '';
+        firstNameText.textContent = state.firstName;
+        lastNameText.textContent = state.lastName;
+    }
+    helloText.textContent = 'Привет, ' + state.firstName + ' ' + state.lastName + '!';
+}
+
+// Обработчик отправки формы
 function handleFormSubmit(e) {
     e.preventDefault();
-    if (editButton.textContent === 'Edit Profile') {
-      editButton.textContent = 'Save Profile';
-      hide(firstNameText);
-      hide(lastNameText);
-      show(firstNameInput);
-      show(lastNameInput);
-    } else {
-      editButton.textContent = 'Edit Profile';
-      hide(firstNameInput);
-      hide(lastNameInput);
-      show(firstNameText);
-      show(lastNameText);
-    }
-  }
-  
-  function handleFirstNameChange() {
-    firstNameText.textContent = firstNameInput.value;
-    helloText.textContent = (
-      'Hello ' +
-      firstNameInput.value + ' ' +
-      lastNameInput.value + '!'
-    );
-  }
-  
-  function handleLastNameChange() {
-    lastNameText.textContent = lastNameInput.value;
-    helloText.textContent = (
-      'Hello ' +
-      firstNameInput.value + ' ' +
-      lastNameInput.value + '!'
-    );
-  }
-  
-  function hide(el) {
-    el.style.display = 'none';
-  }
-  
-  function show(el) {
-    el.style.display = '';
-  }
-  
-  let form = document.getElementById('form');
-  let editButton = document.getElementById('editButton');
-  let firstNameInput = document.getElementById('firstNameInput');
-  let firstNameText = document.getElementById('firstNameText');
-  let lastNameInput = document.getElementById('lastNameInput');
-  let lastNameText = document.getElementById('lastNameText');
-  let helloText = document.getElementById('helloText');
-  form.onsubmit = handleFormSubmit;
-  firstNameInput.oninput = handleFirstNameChange;
-  lastNameInput.oninput = handleLastNameChange;
+    state.isEditing = !state.isEditing;
+    render();
+}
+
+// Обработчик изменения имени
+function handleFirstNameChange() {
+    state.firstName = firstNameInput.value;
+    render();
+}
+
+// Обработчик изменения фамилии
+function handleLastNameChange() {
+    state.lastName = lastNameInput.value;
+    render();
+}
+
+// Подписка на события
+form.onsubmit = handleFormSubmit;
+firstNameInput.oninput = handleFirstNameChange;
+lastNameInput.oninput = handleLastNameChange;
+
+// Первичный рендер
+render();
