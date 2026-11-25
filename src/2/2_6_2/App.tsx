@@ -25,8 +25,10 @@ export default function Canvas() {
     });
 
     function handleMove(dx: number, dy: number) {
-        shape.position.x += dx;
-        shape.position.y += dy;
+        setShape(prev => ({
+            ...prev,
+            position: { x: prev.position.x + dx, y: prev.position.y + dy },
+        }));
     }
 
     function handleColorChange(e: any) {
