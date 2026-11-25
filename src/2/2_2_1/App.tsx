@@ -1,8 +1,8 @@
 // 2_2_1 Complete the gallery 
 /*
-  При нажатии кнопки "Next" на последней скульптуре происходит сбой кода. Исправьте логику, чтобы предотвратить сбой. Вы можете сделать это, добавив дополнительную логику в обработчик события или отключив кнопку, когда действие невозможно.
+При нажатии кнопки "Next" на последней скульптуре происходит сбой кода. Исправьте логику, чтобы предотвратить сбой. Вы можете сделать это, добавив дополнительную логику в обработчик события или отключив кнопку, когда действие невозможно.
 
-  После устранения сбоя добавьте кнопку "Предыдущая", которая показывает предыдущую скульптуру. Она не должна разбиваться на первой скульптуре.
+После устранения сбоя добавьте кнопку "Предыдущая", которая показывает предыдущую скульптуру. Она не должна разбиваться на первой скульптуре.
 */
 
 import { useState } from 'react';
@@ -13,8 +13,19 @@ export default function Gallery() {
     const [index, setIndex] = useState(0);
     const [showMore, setShowMore] = useState(false);
 
+    const isFirst = index === 0;
+    const isLast = index === sculptureList.length - 1;
+
     function handleNextClick() {
-        setIndex(index + 1);
+        if (!isLast) {
+            setIndex(index + 1);
+        }
+    }
+
+    function handlePrevClick() {
+        if (!isFirst) {
+            setIndex(index - 1);
+        }
     }
 
     function handleMoreClick() {
@@ -24,7 +35,8 @@ export default function Gallery() {
     let sculpture = sculptureList[index];
     return (
         <>
-            <button onClick={handleNextClick}>Next</button>
+            <button onClick={handlePrevClick} disabled={isFirst}>Previous</button>
+            <button onClick={handleNextClick} disabled={isLast}>Next</button>
             <h2>
                 <i>{sculpture.name} </i>
                 by {sculpture.artist}
