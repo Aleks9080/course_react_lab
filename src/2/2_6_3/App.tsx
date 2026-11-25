@@ -1,13 +1,12 @@
 // 2_6_3 Update an object with Immer 
 /*
-    Имеется перетаскиваемый ящик на статичном фоне. Вы можете изменить цвет поля с помощью кнопки select.
+Имеется перетаскиваемый ящик на статичном фоне. Вы можете изменить цвет поля с помощью кнопки select.
 
-    Но есть ошибка. Если сначала переместить ящик, а затем изменить его цвет, фон (который не должен двигаться!) "перепрыгнет" на позицию ящика. Но этого не должно произойти: параметр position у Background установлен в initialPosition, что равно { x: 0, y: 0 }. Почему фон перемещается после изменения цвета?
+Но есть ошибка. Если сначала переместить ящик, а затем изменить его цвет, фон (который не должен двигаться!) "перепрыгнет" на позицию ящика. Но этого не должно произойти: параметр position у Background установлен в initialPosition, что равно { x: 0, y: 0 }. Почему фон перемещается после изменения цвета?
 
-    На этот раз исправьте мутацию, используя Immer. Для вашего удобства функция useImmer уже импортирована, поэтому вам нужно изменить переменную состояния shape, чтобы использовать ее.
+На этот раз исправьте мутацию, используя Immer. Для вашего удобства функция useImmer уже импортирована, поэтому вам нужно изменить переменную состояния shape, чтобы использовать ее.
 */
 
-import { useState } from 'react';
 import { useImmer } from 'use-immer';
 import Background from './Background';
 import Box from './Box';
@@ -20,20 +19,22 @@ const initialPosition = {
 };
 
 export default function Canvas() {
-    const [shape, setShape] = useState({
+    const [shape, setShape] = useImmer({
         color: 'orange',
         position: initialPosition,
     });
 
     function handleMove(dx: number, dy: number) {
-        shape.position.x += dx;
-        shape.position.y += dy;
+        // Immer позволяет мутировать черновик draft, создавая новые объекты только для изменённых частей
+        setShape(draft => {
+            draft.position.x += dx;
+            draft.position.y += dy;
+        });
     }
 
     function handleColorChange(e: any) {
-        setShape({
-            ...shape,
-            color: e.target.value,
+        setShape(draft => {
+            draft.color = e.target.value;
         });
     }
 
@@ -58,4 +59,3 @@ export default function Canvas() {
         </>
     );
 }
-
