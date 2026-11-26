@@ -7,23 +7,17 @@ import { useState } from 'react';
 
 export default function App() {
   const [showHint, setShowHint] = useState(false);
-  if (showHint) {
-    return (
-      <div>
-        <p><i>Hint: Your favorite city?</i></p>
-        <Form />
-        <button onClick={() => {
-          setShowHint(false);
-        }}>Hide hint</button>
-      </div>
-    );
-  }
   return (
     <div>
-      <Form />
+      <Form key="form" />
+      {showHint && (
+        <p><i>Hint: Your favorite city?</i></p>
+      )}
       <button onClick={() => {
-        setShowHint(true);
-      }}>Show hint</button>
+        setShowHint(prev => !prev);
+      }}>
+        {showHint ? 'Hide hint' : 'Show hint'}
+      </button>
     </div>
   );
 }
