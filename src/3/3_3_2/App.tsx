@@ -1,30 +1,32 @@
 // 3_3_2 Filtering a list  
 /*
-  В этом примере SearchBar имеет собственное состояние query, которое управляет вводом текста. Его родительский компонент FilterableList отображает список элементов, но он не учитывает поисковый запрос.
+В этом примере SearchBar имеет собственное состояние query, которое управляет вводом текста. Его родительский компонент FilterableList отображает список элементов, но он не учитывает поисковый запрос.
 
-  Используйте функцию filterItems(foods, query) для фильтрации списка в соответствии с поисковым запросом. Чтобы проверить ваши изменения, проверьте, что ввод "s" в поле ввода отфильтровывает список до "Sushi", "Shish kebab" и "Dim sum".
+Используйте функцию filterItems(foods, query) для фильтрации списка в соответствии с поисковым запросом. Чтобы проверить ваши изменения, проверьте, что ввод "s" в поле ввода отфильтровывает список до "Sushi", "Shish kebab" и "Dim sum".
 
-  Обратите внимание, что filterItems уже реализован и импортирован, поэтому вам не нужно писать его самостоятельно!
+Обратите внимание, что filterItems уже реализован и импортирован, поэтому вам не нужно писать его самостоятельно!
 */
 
 import { useState } from 'react';
 import { foods, filterItems, Item } from './data';
 
 export default function FilterableList() {
+  const [query, setQuery] = useState('');
+
+  const filteredFoods = filterItems(foods, query);
+
   return (
     <>
-      <SearchBar />
+      <SearchBar query={query} onChange={setQuery} />
       <hr />
-      <List items={foods} />
+      <List items={filteredFoods} />
     </>
   );
 }
 
-function SearchBar() {
-  const [query, setQuery] = useState('');
-
+function SearchBar({ query, onChange }: { query: string; onChange: (value: string) => void }) {
   function handleChange(e: any) {
-    setQuery(e.target.value);
+    onChange(e.target.value);
   }
 
   return (
@@ -41,6 +43,12 @@ function SearchBar() {
 function List({ items }: { items: Item[] }) {
   return (
     <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
       <tbody>
         {items.map(food => (
           <tr key={food.id}>
